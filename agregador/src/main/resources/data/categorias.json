@@ -1,0 +1,262 @@
+[
+  {
+    "nombre_normalizado": "Incendio Forestal",
+    "sinonimos": [
+      "fuego forestal",
+      "incendios forestales",
+      "fuego en el bosque",
+      "quema de campo",
+      "fuego descontrolado",
+      "incendio de pastizales",
+      "conflagración forestal",
+      "quema controlada",
+      "incendio rural",
+      "incendio de montaña",
+      "fuego de maleza"
+    ]
+  },
+  {
+    "nombre_normalizado": "Incendio Urbano",
+    "sinonimos": [
+      "incendio de edificio",
+      "fuego en casa",
+      "fuego en departamento",
+      "incendio en comercio",
+      "fuego estructural",
+      "incendio industrial",
+      "fuego en fabrica"
+    ]
+  },
+  {
+    "nombre_normalizado": "Accidente Vial",
+    "sinonimos": [
+      "accidente de transito",
+      "choque",
+      "fatalidad en ruta",
+      "colision",
+      "accidente automovilístico",
+      "accidente de coche",
+      "accidente de auto",
+      "vuelco",
+      "atropello",
+      "accidente de autobús",
+      "siniestro vial",
+      "despiste vehicular",
+      "choque multiple"
+    ]
+  },
+  {
+    "nombre_normalizado": "Accidente Ferroviario",
+    "sinonimos": [
+      "descarrilamiento",
+      "choque de trenes",
+      "accidente de tren",
+      "colision ferroviaria"
+    ]
+  },
+  {
+    "nombre_normalizado": "Caída de Aeronave",
+    "sinonimos": [
+      "accidente aereo",
+      "caida de avion",
+      "aeronave impacta",
+      "accidente de avion",
+      "accidente de avioneta",
+      "caida de avioneta",
+      "accidente de helicóptero",
+      "caida de helicoptero",
+      "aterrizaje forzoso",
+      "avion sin control",
+      "desplome aereo"
+    ]
+  },
+  {
+    "nombre_normalizado": "Inundación",
+    "sinonimos": [
+      "riada",
+      "desborde de rio",
+      "anegacion",
+      "inundacion",
+      "crecida de rio",
+      "inundaciones",
+      "desbordamiento",
+      "lluvia torrencial",
+      "riada repentina",
+      "desborde de lago",
+      "torrente de agua",
+      "lluvias extremas",
+      "inundación por lluvias intensas",
+      "anegamiento masivo"
+    ]
+  },
+  {
+    "nombre_normalizado": "Sequía",
+    "sinonimos": [
+      "falta de agua",
+      "escasez hidrica",
+      "desertificación",
+      "ausencia de lluvias",
+      "crisis hidrica",
+      "sequedad extrema",
+      "crisis hídrica"
+    ]
+  },
+  {
+    "nombre_normalizado": "Granizo",
+    "sinonimos": [
+      "precipitación de granizo",
+      "granizo de gran tamaño",
+      "fenómeno meteorológico con granizo",
+      "caída de granizo",
+      "tormenta de granizo",
+      "pedrada"
+    ]
+  },
+  {
+    "nombre_normalizado": "Ola de Calor",
+    "sinonimos": [
+      "calor extremo",
+      "altas temperaturas",
+      "golpe de calor",
+      "temperaturas extremas"
+    ]
+  },
+  {
+    "nombre_normalizado": "Evento Sanitario",
+    "sinonimos": [
+      "brote de enfermedad",
+      "epidemia",
+      "crisis sanitaria",
+      "emergencia sanitaria",
+      "alerta sanitaria",
+      "salud publica",
+      "pandemia",
+      "enfermedad contagiosa",
+      "virus detectado",
+      "crisis epidemiológica"
+    ]
+  },
+  {
+    "nombre_normalizado": "Desastre Natural",
+    "sinonimos": [
+      "evento natural",
+      "fuerza mayor",
+      "fenómeno climático",
+      "catástrofe natural",
+      "evento meteorológico extremo"
+    ]
+  },
+  {
+    "nombre_normalizado": "Terremoto",
+    "sinonimos": [
+      "sismo",
+      "movimiento telúrico",
+      "temblor de tierra",
+      "actividad sísmica",
+      "sacudida"
+    ]
+  },
+  {
+    "nombre_normalizado": "Tornado",
+    "sinonimos": [
+      "torbellino",
+      "ciclón",
+      "tormenta giratoria",
+      "remolino de aire",
+      "supercelda"
+    ]
+  },
+  {
+    "nombre_normalizado": "Huracán",
+    "sinonimos": [
+      "ciclón tropical",
+      "tormenta tropical",
+      "huracán categoría 5",
+      "tempestad extrema",
+      "vientos huracanados"
+    ]
+  },
+  {
+    "nombre_normalizado": "Explosión",
+    "sinonimos": [
+      "detonación",
+      "deflagración",
+      "estallido",
+      "explosión de gas",
+      "explosión química",
+      "explosión industrial",
+      "explosión urbana"
+    ]
+  },
+  {
+    "nombre_normalizado": "Derrumbe",
+    "sinonimos": [
+      "colapso estructural",
+      "derrumbe de edificio",
+      "derrumbe en obra",
+      "desplome",
+      "caída de estructura",
+      "colapso de puente",
+      "desmoronamiento",
+      "derrumbe de cerro"
+    ]
+  },
+  {
+    "nombre_normalizado": "Conflicto Social",
+    "sinonimos": [
+      "manifestación",
+      "protesta",
+      "piquete",
+      "corte de ruta",
+      "paro general",
+      "huelga",
+      "movilización",
+      "incidentes sociales"
+    ]
+  },
+  {
+    "nombre_normalizado": "Crimen o Violencia",
+    "sinonimos": [
+      "homicidio",
+      "asesinato",
+      "tiroteo",
+      "enfrentamiento armado",
+      "robos violentos",
+      "violencia urbana",
+      "ataque armado"
+    ]
+  },
+  {
+    "nombre_normalizado": "Contaminación Ambiental",
+    "sinonimos": [
+      "derrame de petroleo",
+      "contaminacion de rio",
+      "contaminacion del aire",
+      "vertido tóxico",
+      "derrames químicos",
+      "polución"
+    ]
+  },
+  {
+    "nombre_normalizado": "Rescate",
+    "sinonimos": [
+      "operativo de rescate",
+      "búsqueda de desaparecidos",
+      "rescate de personas",
+      "rescate de animales",
+      "salvamento"
+    ]
+  },
+  {
+    "nombre_normalizado": "Corte de Suministro",
+    "sinonimos": [
+      "corte de luz",
+      "apagón",
+      "corte de agua",
+      "falla de energía",
+      "interrupción eléctrica",
+      "interrupción de gas",
+      "servicio interrumpido"
+    ]
+  }
+]

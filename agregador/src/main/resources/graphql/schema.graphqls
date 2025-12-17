@@ -1,0 +1,51 @@
+type Hecho {
+    id: ID
+    titulo: String
+    descripcion: String
+    categoria: String
+    latitud: Float
+    longitud: Float
+    fechaAcontecimiento: String
+    nombreOrigen: String
+}
+
+type Coleccion {
+    handleID: ID
+    titulo: String
+    descripcion: String
+    algoritmoConsenso: String
+    hechos: [Hecho]
+}
+
+# Definimos las CONSULTAS que el front puede hacer
+type Query {
+    # 1. Traer todos los hechos (con filtros opcionales)
+    listarHechos(categoria: String, titulo: String): [Hecho]
+
+    # 2. Traer una colección por su ID
+    obtenerColeccion(id: String!): Coleccion
+
+    # 3. Listar todas las colecciones
+    listarColecciones: [Coleccion]
+
+    #4. Traer un hecho por su ID
+    obtenerHecho(id: ID!): Hecho
+
+    #5. Listar hechos por rango de fecha
+    listarHechosPorRangoFecha(fechaInicio: String!, fechaFin: String!): [Hecho]
+
+    #6. Listar hechos por ubicación (latitud y longitud con un radio)
+    listarHechosPorUbicacion(latitud: Float!, longitud: Float!, radio: Float!): [Hecho]
+
+    #7. Contar hechos por categoría
+    contarHechosPorCategoria(categoria: String!): Int
+
+    #8. Listar categorías únicas de hechos
+    listarCategoriasUnicas: [String]
+
+    #9. Listar hechos ordenados por fecha
+    listarHechosOrdenadosPorFecha(orden: String!): [Hecho]
+
+    #10. Listar hechos por nombre de origen
+    listarHechosPorNombreOrigen(nombreOrigen: String!): [Hecho]
+}
