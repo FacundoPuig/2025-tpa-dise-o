@@ -1,0 +1,110 @@
+@startuml
+class Hecho {
+    - titulo: String
+    - descripcion: String
+    - categoria: Categoria
+    - ubicacion: Ubicacion
+    - fechaAcontecimiento: LocalDate
+    - fechaCarga: LocalDate
+    - contenidoMultimedia: String
+    - origen: Origenes
+    'ver si agregar Etiqueta
+    - etiquetas: List<String>
+    - id: long
+    - estadoRevision: EstadoRevision
+
+    + ocultar(): void
+    + fueCreadoHaceMenosDeDias(dias: Integer): boolean
+    + agregarEtiqueta(etiqueta: String): void
+}
+
+class Categoria{
+    - nombre: String
+}
+enum EstadoRevision {
+    PENDIENTE
+    ACEPTADO
+    ACEPTADO_CON_SUGERENCIAS
+    RECHAZADO
+}
+
+enum Origen{
+    PROXY
+}
+
+class Origenes {
+    - nombre: String
+    - provieneDe: Origen
+}
+
+class Ubicacion{
+    - latitud: Double
+    - longitud: Double
+}
+class Coleccion {
+    - titulo: String
+    - descripcion: String
+    - hechos: List<Hecho>
+    - criteriosPertenencia: List<Filtros>
+    - handleID: String
+
+    + agregarCriterioPertenencia(nuevoCriterio: Filtros): void
+    + aplicarFiltros(filtros: List<Filtros>): List<Hecho>
+    + agregarHechos(nuevosHechos: List<Hecho>): void
+    - agregarOReemplazar(nuevoHecho: Hecho): void
+    - buscarIndicePorTitulo(hecho: Hecho): Integer
+}
+
+interface Filtros {
+    + filtrar(hecho: Hecho): boolean
+}
+
+class FiltroPorCategoria {
+    - busqueda: String
+
+    + FiltroPorCategoria(busqueda: String)
+    + filtrar(hecho: Hecho): boolean
+}
+
+class FiltroPorFecha {
+    - fechaInicio: LocalDate
+    - fechaFin: LocalDate
+
+    + FiltroPorFecha(fechaInicio: LocalDate, fechaFin: LocalDate)
+    + filtrar(hecho: Hecho): boolean
+}
+
+class FiltroPorTitulo {
+    - busqueda: String
+
+    + FiltroPorTitulo(busqueda: String)
+    + filtrar(hecho: Hecho): boolean
+}
+
+class FiltroPorUbicacion {
+    - busqueda: String
+
+    + FiltroPorUbicacion(busqueda: String)
+    + filtrar(hecho: Hecho): boolean
+}
+
+
+Hecho   --> Categoria
+Hecho   --> Ubicacion
+Hecho   --> Origenes
+Hecho   <-- EstadoRevision
+Origenes   <-- Origen
+
+Filtros <|.. FiltroPorCategoria
+Filtros <|.. FiltroPorFecha
+Filtros <|.. FiltroPorTitulo
+Filtros <|.. FiltroPorUbicacion
+
+Coleccion o-- Hecho
+
+'de Dependencia(uso) o de composicion()
+Coleccion ..> Filtros
+
+
+
+@enduml

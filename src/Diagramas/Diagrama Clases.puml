@@ -1,0 +1,251 @@
+@startuml
+'https://plantuml.com/class-diagram
+left to right direction
+
+class Visualizador {
+    -nombre: String
+    -apellido: String
+    -edad: Integer
+    -email: String
+    -hashContrasenia: String
+    -rolUsuario: RolUsuario
+    -id: Long
+    -_mayoriaEdad: Integer
+
+    +esMayorDeEdad(): Boolean
+    }
+
+enum Permiso{
+    CREAR_COLECCION
+    MODIFICAR_CRITERIO_COLECCION
+    ACEPTAR_SOLICITUD_ELIMINACION
+    RECHAZAR_SOLICITUD_ELIMINACION
+    ELIMINAR_COLECCION
+    ETIQUETAR_HECHO
+    REVISAR_HECHO
+    ELIMINAR_HECHO
+    VER_SOLICITUDES
+    EDITAR_HECHO_PROPIO
+}
+
+interface RolUsuario{
+    +tenesPermisos(permiso:Permiso):Boolean
+    +cambiarRol(visualizador: Visualizador): void
+}
+
+class Administrador implements RolUsuario{
+    -nombre:String
+    -listaDePermisos: List<Permiso>
+}
+
+class ContribuyenteAnonimo implements RolUsuario{
+    -nombre:String
+    -listaDePermisos: List<Permiso>
+}
+
+class ContribuyenteRegistrado implements RolUsuario{
+    -nombre:String
+    -listaDePermisos: List<Permiso>
+}
+
+class Visitante implements RolUsuario{
+    -nombre:String
+    -listaDePermisos: List<Permiso>
+}
+
+class Hecho {
+    -titulo: String
+    -descripcion: String
+    -categoria: Categoria
+    -ubicacion: Ubicacion
+    -fechaAcontecimiento: LocalDate
+    -fechaCarga: LocalDate
+    -contenidoMultimedia: String
+    -origen: Origenes
+    -etiquetas: List<String>
+    -id: Long /'Id del Visualizador '/
+    -estadoRevison: EstadoRevision
+
+    +agregarEtiqueta(String etiqueta): void
+    +ocultar(): void
+    +fueCreadoHaceMenosDeDias(): Boolean
+}
+
+class Categoria{
+    -nombre: String
+}
+
+class Ubicacion{
+    -latitud: Double
+    -longitud: Double
+}
+
+enum EstadoRevision{
+    PENDIENTE,
+    ACEPTADO,
+    ACEPTADO_CON_SUGERENCIAS,
+    RECHAZADO
+}
+
+class SolicitudEliminacion {
+    -nroDeSolicitud: Integer
+    -unHecho: Hecho
+    -tituloDelHechoAEliminar: String
+    -estado: Estados
+    -motivo: String
+    -fechaCreacionSolicitud: LocalDateTime
+    -nroSolicitudSiguiente: Integer
+    -registroCambioEstado: List<RegistroCambioEstado>
+
+    +agregarEstado(RegistroCambioEstado cambioEstado): void
+}
+
+
+
+class ValidadorSolicitud {
+    -_MIN_CARACTERES: Integer
+
+    +esValido(String motivo): Boolean
+}
+
+class RegistroCambioEstado {
+    +estado: Estado
+    +fechaModificacion: LocalDateTime
+    +modificador: Visualizador
+    +solicitudEliminacion: SolicitudEliminacion
+}
+'
+'class DetectorDeSpam implements IDetectorDeSpam{
+'    +esSpam(String titulo): Boolean
+'}
+'
+'interface IDetectorDeSpam {
+'    +esSpam(String titulo): Boolean
+'}
+
+class FileReader{
+    -origenCSV: CSV
+    -parsearLineaCSV(linea: String): List<String>
+    +leerHechosDesdeCSV(): List<Hecho>
+}
+
+interface Filtros {
+    +filtrar(Hecho hecho): Boolean
+}
+
+class FiltroPorTitulo implements Filtros {
+    -busqueda: String
+
+    +filtrar(Hecho hecho): Boolean
+}
+class FiltroPorCategoria implements Filtros {
+    -busqueda: String
+
+    +filtrar(Hecho hecho): Boolean
+}
+class FiltroPorFecha implements Filtros{
+    -fechaDesde: LocalDate
+    -fechaHasta: LocalDate
+
+    +filtrar(Hecho hecho): Boolean
+}
+class FiltroPorUbicacion implements Filtros{
+    -busqueda: String
+
+    +filtrar(Hecho hecho): Boolean
+}
+
+class Coleccion {
+    -titulo: String
+    -descripcion: String
+    -hechos: List<Hecho>
+    -criterioPertenencia: List<Filtros>
+    -handleId: String
+
+    +agregarCriterioPertenencia(criterio: Filtros): void
+    +aplicarFiltros(List<Filtros> filtros): List<Hecho>
+    +agregarHechos(List<Hecho> hechos): void
+    -agregarOReemplazar(Hecho nuevoHecho): void
+    +buscarIndicePorTitulo(String titulo): Integer
+}
+
+interface Estados{
+    -estado: String
+
+    aceptar(SolicitudEliminacion solicitud, Visualizador admin): void
+    rechazar(SolicitudEliminacion solicitud, Visualizador admin): void
+}
+class Pendiente implements Estados {
+    -estado: String
+}
+class Aceptada implements Estados {
+    -estado: String
+}
+class Rechazada implements Estados {
+    -estado: String
+}
+
+interface Fuente {
+
+}
+
+class Estatica implements Fuente {
+    -path: String
+    -coleccionesAsociadas: List<Coleccion>
+
+    +crearHechos(): List<Hecho>
+}
+
+class Dinamica implements Fuente {
+    -coleccionesAsociadas: List<Coleccion>
+}
+
+class Proxy implements Fuente {
+    -url: String
+    -coleccionesAsociadas: List<Coleccion>
+}
+
+interface Origenes {
+}
+
+class Usuario implements Origenes{
+    -autor: Visualizador
+    -nombre: String
+}
+
+class CSV implements Origenes {
+    -ruta: String
+    -nombre: String
+   }
+class Servicio_Externo implements Origenes {
+    -servidor: String
+    -nombre: String
+}
+
+
+
+
+SolicitudEliminacion --* Hecho
+ValidadorSolicitud ..> SolicitudEliminacion
+Visualizador --> SolicitudEliminacion
+
+Visualizador ..> Hecho /'Dependencia - le llega como parametro'/
+Visualizador --> RolUsuario
+Coleccion *-- Hecho /'La colección no tiene sentido de existencia sin Hechos'/
+FileReader --> Coleccion /' ?? '/
+Coleccion --> Filtros
+SolicitudEliminacion --> Estados
+
+Coleccion --> Fuente
+Hecho --> Origenes
+
+RolUsuario  --> "*" Permiso
+Hecho --* Ubicacion
+Hecho ..> EstadoRevision
+Hecho --> Categoria
+SolicitudEliminacion ..> RegistroCambioEstado
+RegistroCambioEstado --> SolicitudEliminacion
+
+
+
+@enduml

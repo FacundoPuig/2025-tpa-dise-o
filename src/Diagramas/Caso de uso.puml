@@ -1,0 +1,70 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor Visitante
+actor Administrador
+actor ContribuyenteRegistrado
+actor ContribuyenteAnonimo
+
+rectangle "MetaMapa - Sistema" {
+
+  usecase "Crear colección" as UC1
+  usecase "Importar hechos desde CSV" as UC2
+  usecase "Solicitar eliminación de hecho" as UC3
+  usecase "Evaluar solicitud de eliminación" as UC4
+  usecase "Navegar hechos de colección" as UC5
+  usecase "Filtrar hechos por criterios" as UC6
+  usecase "Etiquetar hecho" as UC7
+  usecase "Cargar hecho" as UC8
+  usecase "Editar hecho propio" as UC9
+  usecase "Revisar hechos" as UC10
+
+  UC1 <|-- UC2 : <<extend>>
+  UC4 --> UC3 : <<include>>
+  UC5 <|-- UC6 : <<extend>>
+}
+
+Visitante --> UC5
+
+ContribuyenteRegistrado --> UC5
+ContribuyenteRegistrado --> UC8
+ContribuyenteRegistrado --> UC9
+
+ContribuyenteAnonimo --> UC5
+ContribuyenteAnonimo --> UC8
+
+Administrador --> UC1
+Administrador --> UC4
+Administrador --> UC5
+Administrador --> UC7
+Administrador --> UC8
+Administrador --> UC10
+
+'===========================
+' Leyenda de roles (comentario)
+'
+' Visitante:
+'   - Puede navegar hechos de colección
+'
+' Contribuyente Anónimo:
+'   - Puede navegar hechos de colección
+'   - Puede cargar hechos
+'
+' Contribuyente Registrado:
+'   - Puede navegar hechos de colección
+'   - Puede cargar hechos
+'   - Puede editar sus propios hechos
+'
+' Administrador:
+'   - Puede crear colección
+'   - Puede evaluar solicitudes de eliminación
+'   - Puede navegar hechos
+'   - Puede etiquetar hechos
+'   - Puede cargar hechos
+'   - Puede revisar hechos
+'
+'===========================
+
+@enduml
+

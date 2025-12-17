@@ -1,0 +1,218 @@
+@startuml
+left to right direction
+
+'--- Algoritmos de Consenso ---
+interface Algoritmos {
+    +cumpleConConcenso(List<Hecho>): void
+}
+class MayoriaSimple implements Algoritmos {
++cumpleConConcenso(List<Hecho>): void
+}
+class MayoriaAbsoluta implements Algoritmos{
++cumpleConConcenso(List<Hecho>): void
+}
+class MencionesMultiples implements Algoritmos{
++cumpleConConcenso(List<Hecho>): void
+}
+
+'--- Filtros ---
+interface Filtros {
+    +filtrar(Hecho hecho): Boolean
+}
+class FiltroPorTitulo implements Filtros {
+    -busqueda: String
+
+    +filtrar(Hecho hecho): Boolean
+}
+class FiltroPorCategoria implements Filtros {
+    -busqueda: String
+
+    +filtrar(Hecho hecho): Boolean
+}
+class FiltroPorFecha implements Filtros{
+    -fechaDesde: LocalDate
+    -fechaHasta: LocalDate
+
+    +filtrar(Hecho hecho): Boolean
+}
+class FiltroPorUbicacion implements Filtros{
+    -Busqueda: String
+
+    +filtrar(Hecho hecho): Boolean
+}
+
+class Fuente {
+    -nombreFuente: String
+    -url: String
+    }
+
+class Coleccion {
+    -titulo: String
+    -descripcion: String
+    -hechos: List<Hecho>
+    -criterioPertenencia: List<Filtros>
+    -handleId: String
+    -algoritmoDeConsenso: Algoritmos
+    -fuentes: Set<Fuente>
+
+    +agregarCriterioPertenencia(Filtros nuevoCriterio): void
+    +aplicarFiltros(List<Filtros> filtros): List<Hecho>
+    '+recorrer(List<Filtros> filtros): List<Hecho> ??
+    +agregarHechos(List<Hecho> hechos): void
+    +agregarFuente(Fuente nuevaFuente): void
+    -agregarOReemplazar(Hecho nuevoHecho): void
+    -buscarIndicePorTitulo(Hecho hecho): Integer
+}
+
+'--- Hechos y entidades relacionadas ---
+class Hecho {
+    -titulo: String
+    -descripcion: String
+    -categoria: Categoria
+    -ubicacion: Ubicacion
+    -fechaAcontecimiento: LocalDate
+    -fechaCarga: LocalDate
+    -contenidoMultimedia: String
+    -origen: Origenes
+    -etiquetas: List<String>
+    -id: Long
+    -esConsensuado: Boolean
+    -estadoRevison: EstadoRevision
+
+    +agregarEtiqueta(String etiqueta): void
+    +ocultar(): void
+    +fueCreadoHaceMenosDeDias(Integer dias): Boolean
+    +esIgual(Hecho segundoHecho): Boolean
+}
+class Categoria {
+    -nombre: String
+}
+class Ubicacion {
+    -latitud: Double
+    -longitud: Double
+}
+enum EstadoRevision {
+    PENDIENTE,
+    ACEPTADO,
+    ACEPTADO_CON_SUGERENCIAS,
+    RECHAZADO
+}
+
+
+class Origenes {
+    -provieneDe: Origen
+    -nombre: String
+}
+
+enum Origen {
+    DINAMICA,
+    ESTATICA,
+    PROXY
+}
+
+'--- Solicitudes ---
+class SolicitudEliminacion {
+    -nroDeSolicitudGenerator: Atomic Long
+    -nroDeSolicitud: Long
+    -unHecho: Hecho
+    -estado: Estados
+    -motivo: String
+    -fechaCreacionSolicitud: LocalDateTime
+    -registroCambioEstado: List<RegistroCambioEstado>
+
+    +agregarEstado(RegistroCambioEstado cambioEstado): void
+}
+
+enum Estados {
+    ACEPTADO,
+    PENDIENTE,
+    RECHAZADO
+}
+
+class RegistroCambioEstado {
+    +estado: Estado
+    +fechaModificacion: LocalDateTime
+    +modificador: Visualizador
+    +solicitudEliminacion: SolicitudEliminacion
+}
+class ValidadorSolicitud {
+    -_MIN_CARACTERES: Integer
+
+    +esValido(String motivo): Boolean
+}
+
+class DetectorDeSpam implements IDetectorDeSpam{
+    +esSpam(String titulo): Boolean
+}
+
+interface IDetectorDeSpam {
+    +esSpam(String titulo): Boolean
+}
+
+'--- Usuarios ---
+enum Permiso {
+    CREAR_COLECCION
+    EDITAR_COLECCION
+    MODIFICAR_CRITERIO_COLECCION
+    ACEPTAR_SOLICITUD_ELIMINACION
+    RECHAZAR_SOLICITUD_ELIMINACION
+    ELIMINAR_COLECCION
+    ETIQUETAR_HECHO
+    REVISAR_HECHO
+    ELIMINAR_HECHO
+    VER_SOLICITUDES
+    EDITAR_HECHO_PROPIO
+}
+
+class RolUsuario {
+    -nombreRol: String
+    -listaDePermisos: List<Permiso>
+    +tenesPermisos(permiso: Permiso): Boolean
+    +cambiarRol(visualizador: Visualizador): void
+    +cumpleCondicion(Visualizador visualizador): Boolean
+}
+
+class UsuarioFisico {
+    -nombre: String
+    -apellido: String
+    -fechaNacimiento: LocalDate
+    -email: String
+    -hashContrasenia: String
+}
+
+class Visualizador {
+    -usuario: UsuarioFisico
+    -rolUsuario: RolUsuario
+    -userId : String
+    -nroIdVIsualizador: Long
+
+    +esMayorDeEdad(): Boolean
+    +edad(): Integer
+    +estaRegistrado(): Boolean
+
+}
+
+'--- Relaciones ---
+Hecho --> Categoria
+Hecho --> Ubicacion
+Hecho --> Origenes
+Hecho --> EstadoRevision
+Hecho <-- SolicitudEliminacion
+SolicitudEliminacion --> RegistroCambioEstado
+SolicitudEliminacion --> Estados
+Visualizador --> RolUsuario
+Visualizador --> SolicitudEliminacion
+Visualizador --> UsuarioFisico
+RegistroCambioEstado --> Visualizador
+RegistroCambioEstado --> SolicitudEliminacion
+RolUsuario --> Permiso
+ValidadorSolicitud ..> SolicitudEliminacion
+IDetectorDeSpam --> SolicitudEliminacion
+Coleccion --> Filtros
+Coleccion --> Algoritmos
+Algoritmos --> Coleccion
+Coleccion *-- Hecho
+Origenes --> Origen
+Coleccion -> Fuente
+
+@enduml

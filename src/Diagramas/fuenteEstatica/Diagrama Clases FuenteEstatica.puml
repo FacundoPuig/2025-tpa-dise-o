@@ -1,0 +1,70 @@
+@startuml
+class Hecho {
+    - titulo: String
+    - descripcion: String
+    - categoria: Categoria
+    - ubicacion: Ubicacion
+    - fechaAcontecimiento: LocalDate
+    - fechaCarga: LocalDate
+    - contenidoMultimedia: String
+    - origen: Origenes
+    - etiquetas: List<Etiqueta>
+    - id: long
+    - estadoRevision: EstadoRevision
+
+
+    + ocultar(): void
+    + fueCreadoHaceMenosDeDias(Integer dias): boolean
+    + agregarEtiqueta(String etiqueta): void
+}
+
+class Etiqueta{
+    - id: long
+    - nombre: String
+    - descripcion: String
+    - hechosRelacionados: List<Hecho>
+}
+
+
+class Categoria {
+    - nombre: String
+}
+
+class Origenes {
+    - nombre: String
+    - provieneDe: Origen
+}
+
+enum Origen{
+    ESTATICA
+}
+
+class Ubicacion {
+    - latitud: Double
+    - longitud: Double
+}
+
+class fileReader{
+    - carpetaEntrada: File
+    - carpetaSalida: File
+
+    + cargarCSV(MultipartFile ruta):void
+    - parsearLineaCSV(String linea): List<String>
+    + leerHechosDesdeCSV():List<Hecho>
+}
+
+enum EstadoRevision {
+    PENDIENTE
+    ACEPTADO
+    ACEPTADO_CON_SUGERENCIAS
+    RECHAZADO
+}
+
+Hecho                 --> Categoria
+Hecho                 --> Ubicacion
+Hecho                 --> Origenes
+Hecho                 <-- EstadoRevision
+Origenes              --> Origen
+Hecho                 --> Etiqueta
+fileReader ...> Hecho
+@enduml

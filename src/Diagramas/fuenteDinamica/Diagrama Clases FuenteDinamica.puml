@@ -1,0 +1,166 @@
+@startuml
+class Hecho {
+    - titulo: String
+    - descripcion: String
+    - categoria: Categoria
+    - ubicacion: Ubicacion
+    - fechaAcontecimiento: LocalDate
+    - fechaCarga: LocalDate
+    - contenidoMultimedia: String
+    - origen: Origenes
+    - etiquetas: List<String>
+    - id: long
+    - estadoRevision: EstadoRevision
+    - enviado: Boolean
+    - ediciones: List<Edicion>
+    - idVisualizadorCreador: String
+
+    + ocultar(): void
+    + fueCreadoHaceMenosDeDias(Integer dias): boolean
+    + agregarEtiqueta(String etiqueta): void
+}
+
+class Edicion {
+    - id : long
+    - idHechoOriginal: long
+    - tituloPropuesto: String
+    - descripcionPropuesta: String
+    - categoriaPropuesta: Categoria
+    - latitudPropuesta: Double
+    - longitudPropuesta: Double
+    - fechaAcontecimientoPropuesta: LocalDate
+    - contenidoMultimediaPropuesto: String
+    - idVisualizadorEditor: String
+    - fechaEdicion : LocalDate
+    - estado: EstadoEdicion
+}
+
+enum EstadoEdicion {
+    PENDIENTE,
+	APROBADA,
+	RECHAZADA,
+	APROBADA_CON_SUGERENCIAS
+}
+
+class Categoria {
+    - nombre: String
+}
+
+class Origenes {
+    - nombre: String
+    - provieneDe: Origen
+}
+
+class Ubicacion {
+    - latitud: Double
+    - longitud: Double
+}
+
+enum EstadoRevision {
+    PENDIENTE
+    ACEPTADO
+    ACEPTADO_CON_SUGERENCIAS
+    RECHAZADO
+}
+
+enum Permiso {
+    CREAR_COLECCION
+    MODIFICAR_CRITERIO_COLECCION
+    ACEPTAR_SOLICITUD_ELIMINACION
+    RECHAZAR_SOLICITUD_ELIMINACION
+    ELIMINAR_COLECCION
+    EDITAR_COLECCION
+    ETIQUETAR_HECHO
+    REVISAR_HECHO
+    ELIMINAR_HECHO
+    VER_SOLICITUDES
+    EDITAR_HECHO_PROPIO
+}
+
+class RolUsuario {
+    - nombrePermiso: String
+    - listaDePermisos: List<Permiso>
+
+    + tenesPermisos(Permiso permiso): boolean
+    + cambiarRol(Visualizador visualizador): void
+    + cumpleCondicion(Visualizador visualizador): boolean
+}
+
+class UsuarioFisico{
+    - nombre: String
+    - apellido: String
+    - fechaDeNacimiento: LocalDate
+    - email: String
+    - hashContrasenia: String
+}
+
+class Visualizador {
+    - usuario: UsuarioFisico
+    - rolUsuario: RolUsuario
+    - userId : String
+    - nroIdVisualizador: final AtomicLong
+    + esMayorDeEdad(): Boolean
+    + edad(): Integer
+    + estaRegistrado(): Boolean
+}
+'no estoy seguro de esto
+/'
+class ValidadorSolicitud {
+    - MIN_CARACTERES: static Integer
+
+    + static esValido(String motivo): boolean
+}
+
+interface IDetectorDeSpam {
+    + esSpam(String titulo): boolean
+}
+
+class DetectorDeSpam {
+    - solicitudEliminacionRepository: ISolicitudEliminacionRepository
+
+    + esSpam(String titulo): boolean
+}
+
+interface ISolicitudEliminacionRepository {
+}
+'/
+/'
+class SolicitudEliminacion {
+    - nroDeSolicitudGenerator: final AtomicLong
+    - nroSolicitud: Long
+    - unHecho: Hecho
+    - estado: Estados
+    - motivo: String
+    - fechaCreacionSolicitud: LocalDateTime
+    - RegistroCambioEstado: static List<RegistroCambioEstado>
+
+    + static getRegistroCambioEstado(): List<RegistroCambioEstado>
+    + agregarEstado(RegistroCambioEstado cambioEstado): void
+    + getFechaUltimaModificacionSolicitud(): LocalDateTime
+    + setFechaUltimaModificacionSolicitud(LocalDateTime fechaUltimaModificacion): void
+}
+'/
+
+
+
+Hecho                 --> Categoria
+Hecho                 --> Ubicacion
+Hecho                 --> Origenes
+'Hecho                 <-- SolicitudEliminacion
+Hecho                 --> Visualizador
+Hecho                 --* Edicion
+Edicion               --> Visualizador
+Visualizador          *-- UsuarioFisico
+RolUsuario            <-- Permiso
+Visualizador          <-- RolUsuario
+Edicion               <-- EstadoEdicion
+Hecho                 <-- EstadoRevision
+
+'SolicitudEliminacion  *-- Estados
+
+
+'no se si va
+'IDetectorDeSpam <|.. DetectorDeSpam
+'DetectorDeSpam ..> ISolicitudEliminacionRepository
+
+@enduml

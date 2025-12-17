@@ -1,0 +1,21 @@
+package ar.utn.ba.dsi.servicioUsuarios.models.entities;
+
+public enum Permiso {
+  //Administrador
+  CREAR_COLECCION,
+  MODIFICAR_CRITERIO_COLECCION,
+  ACEPTAR_SOLICITUD_ELIMINACION,
+  RECHAZAR_SOLICITUD_ELIMINACION,
+  ELIMINAR_COLECCION,
+  EDITAR_COLECCION,
+  ETIQUETAR_HECHO,
+  REVISAR_HECHO,
+  ELIMINAR_HECHO,
+  VER_SOLICITUDES,
+
+  //ContribuyenteRegistrado
+  EDITAR_HECHO_PROPIO,
+  //SOLICITAR_ELIMINACION,
+
+  //ContribuyenteAnonimo
+}

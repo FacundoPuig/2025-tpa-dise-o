@@ -1,0 +1,195 @@
+@startuml
+top to bottom direction
+
+' --- ENTIDADES PRINCIPALES ---
+
+entity Coleccion {
+  * **handle_id**: varchar(255) <<PK>>
+  --
+  * titulo: varchar(200)
+  * descripcion: text
+  'ver List<Filtros>
+  * algoritmo_consenso: varchar
+  * criterios_pertenencia: json
+}
+
+entity CriterioPertenencia {
+      * **id**: int <<PK>>
+      --
+      * descripcion: varchar(50)
+      * palabraClave: varchar(255)
+    }
+
+entity coleccion_criterio {
+    * **coleccion_id**: varchar(255) <<PK,FK>>
+    * **criterio_id**: int <<PK,FK>>
+}
+
+entity Hecho {
+  * **id**: bigint <<PK>>
+  --
+  * titulo: varchar(200)
+  * descripcion: text
+  * fecha_acontecimiento: date
+  * fecha_carga: date
+  * contenido_multimedia: varchar(255)
+  * es_consensuado: boolean
+  * estado_revision: varchar(50)
+  --
+  * categoria_id: int <<FK>>
+  * ubicacion_id: int <<FK>>
+  * origen_id: int <<FK>>
+}
+
+entity Etiqueta {
+    * **id**: int <<PK>>
+    --
+    * nombre: varchar(50)
+    * descripcion: text
+}
+
+' NUEVA Entidad de unión para la relación Muchos a Muchos
+entity hecho_etiqueta {
+    * **hecho_id**: bigint <PK,FK>
+    * **etiqueta_id**: int <PK,FK>
+}
+
+entity Fuente {
+  * **id**: int <<PK>>
+  --
+  * nombre: varchar(50)
+  * url: varchar(255)
+}
+
+
+' --- ENTIDADES DE USUARIOS ---
+
+entity Visualizador {
+  * **nroIdVisualizador**: bigint <<PK>>
+  --
+  --
+  * usuario_fisico_id: int <<FK>>
+  * rol_usuario_id: int <<FK>>
+}
+
+entity UsuarioFisico {
+  * **id**: int <<PK>>
+  --
+  * nombre: varchar(100)
+  * apellido: varchar(100)
+  * fecha_nacimiento: date
+  * email: varchar(200)
+  * hash_contrasenia: varchar(100)
+}
+
+entity RolUsuario {
+  * **id**: int <<PK>>
+  --
+  * nombrePermiso: varchar(100)
+}
+
+entity RolUsuario_Permiso{
+  * rolUsuario_id:int <<FK>>
+  --
+  * permiso:varchar(50)
+}
+
+' --- ENTIDADES DE SOLICITUDES ---
+
+entity SolicitudEliminacion {
+  * **nroSolicitud**: bigint <<PK>>
+  --
+  * motivo: text
+  * estado: varchar(50)
+  * fechaCreacionSolicitud: date
+  --
+  * hecho_id: bigint <<FK>>
+}
+
+entity RegistroCambioEstado {
+  * **id**: bigint <<PK>>
+  --
+  * estado: varchar(50)
+  * fechaModificacion: date
+  * motivoRechazo: varchar(255)
+  --
+  * solicitud_eliminacion_id: bigint <<FK>>
+  * visualizador_modificador_id: bigint <<FK>>
+}
+
+
+' --- TABLAS DE CATÁLOGO (LOOKUP) ---
+
+entity Categoria {
+  * **id**: int <<PK>>
+  --
+  * nombre: varchar(200)
+}
+
+entity Ubicacion {
+  * **id**: int <<PK>>
+  --
+  * latitud: double
+  * longitud: double
+  * provincia: varchar(70)
+}
+
+entity Origen {
+  * **id**: int <<PK>>
+  --
+  * nombre: varchar(200)
+  * proviene_de: varchar(50)
+}
+
+
+' --- TABLAS DE UNIÓN (JOIN TABLES) ---
+
+entity coleccion_hecho {
+  * **coleccion_id**: varchar(255) <<PK,FK>>
+  * **hecho_id**: bigint <<PK,FK>>
+}
+
+entity coleccion_fuente {
+  * **coleccion_id**: varchar(255) <<PK,FK>>
+  * **fuente_id**: int <<PK,FK>>
+}
+
+
+
+' --- RELACIONES ---
+
+' Relaciones de Coleccion
+Coleccion ||--o{ coleccion_hecho
+Hecho ||--o{ coleccion_hecho
+Coleccion ||--o{ coleccion_fuente
+Fuente ||--o{ coleccion_fuente
+
+' Relaciones de Hecho
+
+
+' Relaciones de Usuarios
+Visualizador }o--|| RolUsuario
+Visualizador ||--|| UsuarioFisico
+
+' Relaciones de Solicitudes
+SolicitudEliminacion }o--|| Hecho
+SolicitudEliminacion ||--o{ RegistroCambioEstado
+RegistroCambioEstado }o--|| Visualizador
+
+' Relaciones para las etiquetas (Muchos a Muchos)
+Hecho ||--o{ hecho_etiqueta
+Etiqueta ||--o{ hecho_etiqueta
+
+Categoria ||--o{ Hecho
+
+Ubicacion ||--o{ Hecho
+
+Origen ||--o{ Hecho
+
+' Un Permiso puede tener muchos RolUsuario
+RolUsuario_Permiso }o--|| RolUsuario
+
+Coleccion ||--o{ coleccion_criterio
+CriterioPertenencia ||--o{ coleccion_criterio
+
+@enduml

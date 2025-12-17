@@ -1,0 +1,145 @@
+@startuml
+
+' -------------------
+' DEFINICIÓN DE ENTIDADES
+' -------------------
+
+' Entidad principal "Hecho"
+entity Hecho {
+  * **id**: bigint <<PK>>
+  --
+  * titulo: varchar(200)
+  * descripcion: text
+  * fechaAcontecimiento: date
+  * fechaCarga: date
+  * contenidoMultimedia: varchar(255)
+  * enviado: boolean
+  * estadoRevision: varchar(50)
+  --
+  * origen_id: int <<FK>>
+  * categoria_id: bigint <<FK>>
+  * edicion_id: bigint <<FK>>
+  * ubicacion_id: int <<FK>>
+  * visualizador_creador_id: bigint <<FK>>
+}
+
+'Entidad para almacenar las etiquetas únicas
+entity Etiqueta {
+    * **id**: int <<PK>>
+    --
+    * nombre: varchar(50)
+    * descripcion: text
+}
+
+'Entidad de unión para la relación Muchos a Muchos
+entity Hecho_Etiqueta {
+    * **hecho_id**: bigint <PK,FK>
+    * **etiqueta_id**: int <PK,FK>
+}
+
+' Entidad relacionada "Edicion"
+entity Edicion {
+  * **id**: bigint <<PK>>
+  --
+  * tituloPropuesto: varchar(200)
+  * descripcionPropuesta: text
+  * latitudPropuesta: Double
+  * longitudPropuesta: Double
+  * fechaAcontecimientoPropuesta: Date
+  * contenidoMultimediaPropuesto: varchar(255)
+  * idVisualizadorEditor: bigint
+  * fechaEdicion : Date
+  * estado: varchar(50)
+  --
+  * hechoOriginal_id: bigint <<FK>>
+  * categoriaPropuesta_id: bigint <<FK>>
+}
+
+' Entidades de catálogo
+entity Categoria {
+  * **id**: bigint <<PK>>
+  --
+  nombre: varchar(255)
+}
+
+entity Origenes {
+  * **id**: int <<PK>>
+  --
+  nombre: varchar(100)
+  provieneDe: varchar(50)
+}
+
+entity Ubicacion {
+  * **id**: int <<PK>>
+  --
+  latitud: double
+  longitud: double
+}
+
+entity Visualizador {
+  * **nroIdVisualizador**: bigint <<PK>>
+  --
+  --
+  * rolUsuario_id: int <<FK>>
+  * usuarioFisico_id: int <<FK>>
+}
+
+entity RolUsuario {
+  * **id**: int <<PK>>
+  --
+  * nombrePermiso: varchar(100)
+}
+
+entity RolUsuario_Permiso{
+  * rolUsuario_id:int <<FK>>
+  --
+  * permiso:varchar(50)
+}
+
+entity UsuarioFisico {
+  * **id**: int <<PK>>
+  --
+  * nombre: varchar(100)
+  * apellido: varchar(100)
+  * fechaDeNacimiento: Date
+  * email: varchar(100)
+  * hashContrasenia: varchar(100)
+}
+
+
+' -------------------
+' DEFINICIÓN DE RELACIONES
+' -------------------
+
+' Relaciones para las etiquetas (Muchos a Muchos)
+Hecho ||--o{ Hecho_Etiqueta
+Etiqueta ||--o{ Hecho_Etiqueta
+
+' Un Hecho tiene muchas Ediciones
+Hecho ||--o{ Edicion
+
+' Muchos Hechos pertenecen a una Categoria
+Hecho }o--|| Categoria
+
+' Muchos Hechos pertenecen a una Categoria
+Edicion }o--|| Categoria
+
+' Muchos Hechos pertenecen a un Origen
+Hecho }o--|| Origenes
+
+' Muchos Hechos pertenecen a una Ubicacion
+Hecho }o--|| Ubicacion
+
+' Muchos Hechos son creados por un Visualizador
+Hecho }o--|| Visualizador
+
+' Un RolUsuario puede tener muchos Visualizadores
+Visualizador }o--|| RolUsuario
+
+' Un UsuarioFisico tiene un solo Visualizador
+Visualizador ||--|| UsuarioFisico
+
+' Un Permiso puede tener muchos RolUsuario
+RolUsuario_Permiso }o--|| RolUsuario
+
+@enduml

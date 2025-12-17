@@ -1,0 +1,13 @@
+Correcciones ENTREGA 3
+
+Fuente Dinamica
+Que se guarden datos de quien edito porque se pueden rechazar los cambios - en lugar de pisar todo que se vea bien que se modifica
+
+Consenso - con que fuentes se compara? con todas las del sistema o las de la coleccion? nosotros hicimos con la coleccion pero dijo que no esta aclarado
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Cada cambio es una entidad
+Entidad que guarde los cambios que se le hicieron a un hecho
+
+

@@ -1,0 +1,16 @@
+@startuml
+class EstadisticaDeSpam{
+    - id: long
+    - cantidadSpam: long
+    - fechaGeneracion: LocalDateTime
+}
+
+class EstadisticaPorCategoria{}
+
+class EstadisticaPorHoraYCategoria{}
+
+class EstadisticaPorProvincia{}
+
+class EstadisticaPorProvinciaYCategoria{}
+
+@enduml

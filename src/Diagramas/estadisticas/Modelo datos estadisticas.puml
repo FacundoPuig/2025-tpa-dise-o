@@ -1,0 +1,114 @@
+@startuml
+
+skinparam linetype ortho
+hide empty members
+skinparam shadowing false
+skinparam titleBorderRoundCorner 15
+skinparam titleFontSize 20
+
+
+
+
+entity "colecciones" {
+  * **id**: bigint <<PK>>
+  --
+  * handle_id: varchar(255) <<UK>>
+  * titulo: varchar(255)
+  * descripcion: text
+}
+
+entity "hechos" {
+  * **id**: bigint <<PK>>
+  --
+  * titulo: varchar(255)
+  * descripcion: text
+  * fecha_acontecimiento: datetime
+  * fecha_carga: date
+  * categoria_id: bigint <<FK>>
+  * ubicacion_id: bigint <<FK>>
+}
+
+entity "ubicaciones" {
+  * **id**: bigint <<PK>>
+  --
+  * latitud: double
+  * longitud: double
+  * provincia: varchar(70)
+}
+
+entity "categorias" {
+  * **id**: bigint <<PK>>
+  --
+  * nombre: varchar(200) <<UK>>
+}
+
+' Tabla de unión para la relación Muchos a Muchos
+entity "coleccion_hecho" {
+    * **coleccion_id**: bigint <<PK, FK>>
+    * **hecho_id**: bigint <<PK, FK>>
+}
+
+entity "estadisticas_spam" {
+    * **id**: bigint <<PK>>
+    --
+    * cantidad_spam: bigint
+    * fecha_generacion: datetime
+}
+
+entity "solicitudes_spam" {
+    * **id**: bigint <<PK>>
+    --
+    * nro_de_solicitud: bigint
+    * titulo_del_hecho: varchar(255)
+    * motivo_rechazo: varchar(255)
+    * fecha_creacion_solicitud: datetime
+    * estadistica_id: bigint <<FK>>
+}
+
+entity "estadisticas_por_provincia" {
+    * **id**: bigint <<PK>>
+    --
+    * provincia: varchar(255)
+    * cantidad_hechos: bigint
+    * fecha_generacion: datetime
+    * coleccion_id: bigint <<FK>>
+}
+
+entity "estadisticas_por_categoria" {
+    * **id**: bigint <<PK>>
+    --
+    * categoria: varchar(255)
+    * cantidad_hechos: bigint
+    * fecha_generacion: datetime
+}
+
+entity "estadisticas_por_hora_y_categoria" {
+    * **id**: bigint <<PK>>
+    --
+    * hora_del_dia: int
+    * categoria: varchar(255)
+    * cantidad_hechos: bigint
+    * fecha_generacion: datetime
+}
+
+entity "estadisticas_por_provincia_y_categoria" {
+    * **id**: bigint <<PK>>
+    --
+    * provincia: varchar(255)
+    * categoria: varchar(255)
+    * cantidad_hechos: bigint
+    * fecha_generacion: datetime
+}
+
+
+' --- relaciones --
+hechos }o--|| categorias
+hechos }o--|| ubicaciones
+
+colecciones ||--|{ coleccion_hecho
+hechos ||--|{ coleccion_hecho
+
+estadisticas_spam ||--o{ solicitudes_spam
+estadisticas_por_provincia }o--|| colecciones
+
+@enduml
